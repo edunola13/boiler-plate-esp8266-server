@@ -3,16 +3,21 @@
 #include <ESP8266WebServer.h>
 #include <PubSubClient.h>
 
+//
+// INTERFACE
+//
+void callback_mqtt(char* topic, byte* payload, unsigned int length);
+
 struct Config {
   char name[20] = "Boiler";
   char access_key[30] = "";
   char mq_server[15] = "";
-  char mq_client[15] = "";  // Can be unique
+  uint16_t mq_port = 1883;
   char mq_user[10] = "";
   char mq_pass[10] = "";
 
-  char ssid[30] = "";
-  char passwd[30] = "";
+  char ssid[30] = "FibertelEdu18R";
+  char passwd[30] = "0143507310";
   char ap_ssid[20] = "BoilerPlate";
   char ap_passwd[20] = "BoilerPlate";  // Min 8: dont work if <8
 
@@ -85,6 +90,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   DEB_DO_PRINTLN();
 
   // DO SOMETHING
+  callback_mqtt(topic, payload, length);
 }
 
 void initWifi() {
@@ -100,6 +106,7 @@ void initWifi() {
       IPAddress subnet = IPAddress(config.subnet[0], config.subnet[1], config.subnet[2], config.subnet[3]);
       WiFi.config(ip, gateway, subnet);
     }
+    WiFi.hostname(DEVICE_TYPE);
     WiFi.begin(config.ssid, config.passwd);
     WiFi.mode(WIFI_STA);
     // check the status of WiFi connection to be WL_CONNECTED
@@ -128,7 +135,7 @@ void initWifi() {
     }
 
     if (String(config.mq_server) != "") {
-      mqttClient.setServer(config.mq_server, 1883);
+      mqttClient.setServer(config.mq_server, config.mq_port);
       mqttClient.setCallback(callback);
       status.lastMqttTime = millis() + WIFI_REINTENT_AFTER_SETUP;
     }
@@ -152,7 +159,10 @@ void reconnect() {
   status.lastMqttTime = millis();
   DEB_DO_PRINT("Attempting MQTT connection...");
   // Attempt to connect
-  if (mqttClient.connect(config.mq_client, config.mq_user, config.mq_pass)) {
+  String mq_client = String(MQTT_CLIENT_PREFIX) + String(DEVICE_ID);
+  char mq_client_ar[mq_client.length() +1];
+  mq_client.toCharArray(mq_client_ar, mq_client.length() + 1);
+  if (mqttClient.connect(mq_client_ar, config.mq_user, config.mq_pass)) {
     DEB_DO_PRINTLN("connected");
     // ... and resubscribe
     // mqttClient.subscribe("/xxx/xxx/xxx");

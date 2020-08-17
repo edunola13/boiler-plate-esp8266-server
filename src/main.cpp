@@ -8,6 +8,9 @@
 #define DOMO_SPEED 9600
 //#define USE_WDT
 //#define WDT_TIME WDTO_8S
+// UUID -> Every provider assign a unique ID
+// It's the way to identify every device.
+#define DEVICE_ID "550e8400-e29b-41d4-a716-446655440001"
 #define DEVICE_TYPE "ESP_ALL"
 #define DEVICE_VERSION "1"
 
@@ -16,15 +19,24 @@
 #define MAX_WIFI_INIT_RETRY 20
 #define WIFI_REINTENT_AFTER_SETUP 1000*60*5  // 5 Minutes reintent if ssid is set
 #define MQTT_REINTENT_AFTER_SETUP 1000*60*1  // 1 Minutes reintent if ssid is set
+#define MQTT_CLIENT_PREFIX "CLIENT-"
 
 #include <common_initial.h>
 #include "messages.h"
-#include "config.h"
+// Dont touch this
+#include "core/config.h"
+#include "core/memory.h"
+#include "core/controllers.h"
+
+// Your Modules
 #include "modules/actuators.h"
 #include "modules/sensors.h"
 #include "modules/rules.h"
-#include "memory.h"
-#include "controllers.h"
+
+// Your Configuration
+#include "config/mqtt.h"
+#include "config/memory.h"
+#include "config/controllers.h"
 
 void setup(void) {
     Serial.begin(9600);

@@ -1,3 +1,10 @@
+#include <Arduino.h>
+
+//
+// INTERFACE
+//
+void loadConfigModules(uint8_t pos);
+void saveConfigModules(uint8_t pos);
 
 // CONFIG
 void loadConfig() {
@@ -13,10 +20,7 @@ void loadConfig() {
     //
     // SAVE THAT YOU NEED
     //
-    // for (uint8_t i= 0; i < senSize; i++) {
-    //   sensors[i].readFromEeprom(pos);
-    //   pos += sensors[i].positions();
-    // }
+    loadConfigModules(pos);
   } else {
      DEB_DO_PRINTLN(NO_CONF);
   }
@@ -35,10 +39,7 @@ void saveConfig() {
   //
   // SAVE THAT YOU NEED
   //
-  // for (uint8_t i= 0; i < senSize; i++) {
-  //   sensors[i].saveInEeprom(pos);
-  //   pos+= sensors[i].positions();
-  // }
+  saveConfigModules(pos);
 
   EEPROM.commit();
   DEB_DO_PRINTLN(OK_SAVE_CONF);

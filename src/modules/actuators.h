@@ -3,6 +3,6 @@
 
 #include <actuators/Relay.h>
 
-Relay relays[] = {Relay(D2), Relay(D1)};
+Relay relays[] = {Relay(D1), Relay(D0)};
 
 #endif

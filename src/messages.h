@@ -6,3 +6,6 @@
 
 #define SAVE_CONF "Guardando Configuracion"
 #define OK_SAVE_CONF "Configuracion Guardada"
+
+// CUSTOM MESSAGES BELOW
+// ...
