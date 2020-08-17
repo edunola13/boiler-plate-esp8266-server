@@ -102,8 +102,8 @@ void _response_config() {
 
   jsonBuffer["ssid"] = config.ssid;
   jsonBuffer["passwd"] = config.passwd;
-  jsonBuffer["ap_ssid"] = "****";
-  jsonBuffer["ap_passwd"] = config.ap_passwd;
+  jsonBuffer["ap_ssid"] = config.ap_ssid;
+  jsonBuffer["ap_passwd"] = "****";
   jsonBuffer["staticIp"] = config.staticIp;
 
   JsonArray ipArray = jsonBuffer["ip"].to<JsonArray>();

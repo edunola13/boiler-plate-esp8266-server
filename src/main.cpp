@@ -20,6 +20,7 @@
 #define WIFI_REINTENT_AFTER_SETUP 1000*60*5  // 5 Minutes reintent if ssid is set
 #define MQTT_REINTENT_AFTER_SETUP 1000*60*1  // 1 Minutes reintent if ssid is set
 #define MQTT_CLIENT_PREFIX "CLIENT-"
+#define MQTT_CHANNEL_PREFIX "/device/"
 
 #include <common_initial.h>
 #include "messages.h"

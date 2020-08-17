@@ -7,6 +7,7 @@
 // INTERFACE
 //
 void callback_mqtt(char* topic, byte* payload, unsigned int length);
+void subscribe_mqtt(PubSubClient &mqttClient);
 
 struct Config {
   char name[20] = "Boiler";
@@ -164,7 +165,6 @@ void reconnect() {
   mq_client.toCharArray(mq_client_ar, mq_client.length() + 1);
   if (mqttClient.connect(mq_client_ar, config.mq_user, config.mq_pass)) {
     DEB_DO_PRINTLN("connected");
-    // ... and resubscribe
-    // mqttClient.subscribe("/xxx/xxx/xxx");
+    subscribe_mqtt(mqttClient);
   }
 }
