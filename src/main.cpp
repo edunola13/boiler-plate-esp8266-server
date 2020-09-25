@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WebServer.h>
 // #include <ESP8266WebServerSecure.h>
+#include <ESP8266mDNS.h>
 #include <EEPROM.h>
 #include <ArduinoJson.h>
 
@@ -19,8 +20,8 @@
 #define MAX_WIFI_INIT_RETRY 20
 #define WIFI_REINTENT_AFTER_SETUP 1000*60*5  // 5 Minutes reintent if ssid is set
 #define MQTT_REINTENT_AFTER_SETUP 1000*60*1  // 1 Minutes reintent if ssid is set
-#define MQTT_CLIENT_PREFIX "CLIENT-"
-#define MQTT_CHANNEL_PREFIX "/device/"
+#define MQTT_CLIENT_PREFIX ""
+#define MQTT_CHANNEL_PREFIX "client/"
 
 #include <common_initial.h>
 #include "messages.h"
@@ -35,6 +36,7 @@
 #include "modules/rules.h"
 
 // Your Configuration
+#include "config/mdns.h"
 #include "config/mqtt.h"
 #include "config/memory.h"
 #include "config/controllers.h"
@@ -48,6 +50,8 @@ void setup(void) {
     loadConfig();
     // Inicializo WiFi
     initWifi();
+    // Inicializo MDNS
+    initMDNS();
 
     // Config rest server routing
     config_rest_server_routing();
@@ -56,6 +60,8 @@ void setup(void) {
 }
 
 void loop(void) {
+    MDNS.update();
+
     // Test WiFi Connection
     if (status.status != 'C' && String(config.ssid) != "") {
       reconnect_wifi();
